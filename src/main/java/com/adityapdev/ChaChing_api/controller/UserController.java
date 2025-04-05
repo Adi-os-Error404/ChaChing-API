@@ -1,6 +1,7 @@
 package com.adityapdev.ChaChing_api.controller;
 
 
+import com.adityapdev.ChaChing_api.dto.LoginUserDto;
 import com.adityapdev.ChaChing_api.dto.RegisterNewUserDto;
 import com.adityapdev.ChaChing_api.dto.UpdateUserDto;
 import com.adityapdev.ChaChing_api.dto.UserDetailDto;
@@ -25,6 +26,12 @@ public class UserController {
     public ResponseEntity<UserDetailDto> registerUser(@RequestBody RegisterNewUserDto registerNewUserDto) {
         UserDetailDto savedUser = userService.registerNewUser(registerNewUserDto);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<UserDetailDto> loginUser(@RequestBody LoginUserDto loginUserDto) {
+        UserDetailDto userDto = userService.verifyUserCredentials(loginUserDto.getEmail(), loginUserDto.getPassword());
+        return ResponseEntity.ok(userDto);
     }
 
     @GetMapping
