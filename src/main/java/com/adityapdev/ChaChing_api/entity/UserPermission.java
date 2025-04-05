@@ -17,6 +17,8 @@ public class UserPermission {
     @JoinColumn(name = "permission_id", nullable = false)
     private Permission permission;
 
+    public UserPermission() {}
+
     public UserPermission(Long id, User user, Permission permission) {
         this.id = id;
         this.user = user;

@@ -13,6 +13,8 @@ public class Permission {
     @Column(name = "permission_type", nullable = false, unique = true)
     private PermissionType permissionType;
 
+    public Permission() {}
+
     public Permission(Integer id, PermissionType permissionType) {
         this.id = id;
         this.permissionType = permissionType;
