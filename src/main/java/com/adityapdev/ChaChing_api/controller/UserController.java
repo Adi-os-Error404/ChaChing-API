@@ -2,6 +2,7 @@ package com.adityapdev.ChaChing_api.controller;
 
 
 import com.adityapdev.ChaChing_api.dto.RegisterNewUserDto;
+import com.adityapdev.ChaChing_api.dto.UpdateUserDto;
 import com.adityapdev.ChaChing_api.dto.UserDetailDto;
 import com.adityapdev.ChaChing_api.service.interfaces.IUserService;
 import org.springframework.http.HttpStatus;
@@ -38,5 +39,10 @@ public class UserController {
         return ResponseEntity.ok(userDto);
     }
 
+    @PutMapping
+    public ResponseEntity<UserDetailDto> updateUserDetail(@RequestBody UpdateUserDto updatedUserDto) {
+        UserDetailDto userDto = userService.updateUser(updatedUserDto);
+        return ResponseEntity.ok(userDto);
+    }
 
 }

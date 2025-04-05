@@ -1,6 +1,7 @@
 package com.adityapdev.ChaChing_api.service;
 
 import com.adityapdev.ChaChing_api.dto.RegisterNewUserDto;
+import com.adityapdev.ChaChing_api.dto.UpdateUserDto;
 import com.adityapdev.ChaChing_api.dto.UserDetailDto;
 import com.adityapdev.ChaChing_api.entity.User;
 import com.adityapdev.ChaChing_api.exception.ConflictException;
@@ -11,6 +12,7 @@ import com.adityapdev.ChaChing_api.service.interfaces.IUserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -46,6 +48,29 @@ public class UserService implements IUserService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("User with email %s does not exist.", email)));
         return UserMapper.mapToUserDto(user);
+    }
+
+    @Override
+    public UserDetailDto updateUser(UpdateUserDto updateUserDto) {
+        Optional<User> optionalUser = userRepository.findById(updateUserDto.getId());
+        if (optionalUser.isEmpty())
+            throw new ResourceNotFoundException("User does not exist");
+
+        User user = optionalUser.get();
+
+        if (!Objects.equals(user.getPassword(), updateUserDto.getCurrentPassword()))
+            throw new ConflictException("Current password is incorrect.");
+
+        if (!Objects.equals(user.getEmail(), updateUserDto.getNewEmail()) && userRepository.findByEmail(updateUserDto.getNewEmail()).isPresent())
+            throw new ConflictException(String.format("Email %s is already registered.", updateUserDto.getNewEmail()));
+
+        user.setFirstName(updateUserDto.getFirstName());
+        user.setLastName(updateUserDto.getLastName());
+        user.setEmail(updateUserDto.getNewEmail());
+        user.setPassword(updateUserDto.getNewPassword());
+
+        User updateUser = userRepository.save(user);
+        return UserMapper.mapToUserDto(updateUser);
     }
 
 }
