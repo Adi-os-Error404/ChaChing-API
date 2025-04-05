@@ -8,4 +8,5 @@ import java.util.List;
 public interface IUserService {
     UserDetailDto registerNewUser(RegisterNewUserDto registerNewUserDto);
     List<UserDetailDto> getAllUsers();
+    UserDetailDto getUserByEmail(String email);
 }

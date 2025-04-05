@@ -31,13 +31,6 @@ public class User {
         this.password = password;
     }
 
-    public User(Long id, String firstName, String lastName, String email) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-    }
-
     public Long getId() {
         return id;
     }

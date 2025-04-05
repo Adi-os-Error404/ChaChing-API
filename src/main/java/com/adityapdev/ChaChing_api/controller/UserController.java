@@ -22,7 +22,6 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserDetailDto> registerUser(@RequestBody RegisterNewUserDto registerNewUserDto) {
-
         UserDetailDto savedUser = userService.registerNewUser(registerNewUserDto);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
@@ -32,5 +31,12 @@ public class UserController {
         List<UserDetailDto> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
+
+    @GetMapping("{email}")
+    public ResponseEntity<UserDetailDto> getUserByEmail(@PathVariable("email") String email) {
+        UserDetailDto userDto = userService.getUserByEmail(email);
+        return ResponseEntity.ok(userDto);
+    }
+
 
 }
