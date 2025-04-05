@@ -1,8 +1,11 @@
 package com.adityapdev.ChaChing_api.service.interfaces;
 
-import com.adityapdev.ChaChing_api.dto.GetUserDto;
+import com.adityapdev.ChaChing_api.dto.UserDetailDto;
 import com.adityapdev.ChaChing_api.dto.RegisterNewUserDto;
 
+import java.util.List;
+
 public interface IUserService {
-    GetUserDto registerNewUser(RegisterNewUserDto registerNewUserDto);
+    UserDetailDto registerNewUser(RegisterNewUserDto registerNewUserDto);
+    List<UserDetailDto> getAllUsers();
 }
