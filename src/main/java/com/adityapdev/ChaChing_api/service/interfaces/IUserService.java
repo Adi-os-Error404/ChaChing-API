@@ -10,6 +10,7 @@ public interface IUserService {
     UserDetailDto registerNewUser(RegisterNewUserDto registerNewUserDto);
     List<UserDetailDto> getAllUsers();
     UserDetailDto getUserByEmail(String email);
-
     UserDetailDto updateUser(UpdateUserDto updateUserDto);
+    void deleteUser(long id);
+
 }
