@@ -56,7 +56,7 @@ public class UserService implements IUserService {
     @Override
     public UserDetailDto getUserByEmail(String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("User with email %s does not exist.", email)));
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("User with email \"%s\" does not exist.", email)));
         return UserMapper.mapToUserDto(user);
     }
 
@@ -72,7 +72,7 @@ public class UserService implements IUserService {
             throw new UnauthorizedException("Current password is incorrect.");
 
         if (!Objects.equals(user.getEmail(), updateUserDto.getEmail()) && userRepository.findByEmail(updateUserDto.getEmail()).isPresent())
-            throw new ConflictException(String.format("Email %s is already registered.", updateUserDto.getEmail()));
+            throw new ConflictException(String.format("Email \"%s\" is already registered.", updateUserDto.getEmail()));
 
         user.setFirstName(updateUserDto.getFirstName());
         user.setLastName(updateUserDto.getLastName());
@@ -86,7 +86,7 @@ public class UserService implements IUserService {
     @Override
     public void deleteUser(long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("User with id %d does not exist.", id)));
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("User with id \"%d\" does not exist.", id)));
         userRepository.deleteById(id);
     }
 
