@@ -6,6 +6,7 @@ import com.adityapdev.ChaChing_api.dto.UserDetailDto;
 import com.adityapdev.ChaChing_api.entity.User;
 import com.adityapdev.ChaChing_api.exception.ConflictException;
 import com.adityapdev.ChaChing_api.exception.ResourceNotFoundException;
+import com.adityapdev.ChaChing_api.exception.UnauthorizedException;
 import com.adityapdev.ChaChing_api.mapper.UserMapper;
 import com.adityapdev.ChaChing_api.repository.UserRepository;
 import com.adityapdev.ChaChing_api.service.interfaces.IUserService;
@@ -28,13 +29,22 @@ public class UserService implements IUserService {
     @Override
     public UserDetailDto registerNewUser(RegisterNewUserDto registerNewUserDto) {
         Optional<User> existingUser = userRepository.findByEmail(registerNewUserDto.getEmail());
-        if (existingUser.isPresent()) {
+        if (existingUser.isPresent())
             throw new ConflictException(String.format("Email \"%s\" is already registered.", registerNewUserDto.getEmail()));
-        }
 
         User user = UserMapper.mapToUser(registerNewUserDto);
         User savedUser = userRepository.save(user);
         return UserMapper.mapToUserDto(savedUser);
+    }
+
+    @Override
+    public UserDetailDto verifyUserCredentials(String email, String password) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ConflictException(String.format("Email \"%s\" is not registered.", email)));
+
+        if (!Objects.equals(user.getPassword(), password))
+            throw new UnauthorizedException("Password entered is incorrect.");
+        return UserMapper.mapToUserDto(user);
     }
 
     @Override
@@ -59,7 +69,7 @@ public class UserService implements IUserService {
         User user = optionalUser.get();
 
         if (!Objects.equals(user.getPassword(), updateUserDto.getCurrentPassword()))
-            throw new ConflictException("Current password is incorrect.");
+            throw new UnauthorizedException("Current password is incorrect.");
 
         if (!Objects.equals(user.getEmail(), updateUserDto.getEmail()) && userRepository.findByEmail(updateUserDto.getEmail()).isPresent())
             throw new ConflictException(String.format("Email %s is already registered.", updateUserDto.getEmail()));
