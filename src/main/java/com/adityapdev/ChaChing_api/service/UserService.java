@@ -61,12 +61,12 @@ public class UserService implements IUserService {
         if (!Objects.equals(user.getPassword(), updateUserDto.getCurrentPassword()))
             throw new ConflictException("Current password is incorrect.");
 
-        if (!Objects.equals(user.getEmail(), updateUserDto.getNewEmail()) && userRepository.findByEmail(updateUserDto.getNewEmail()).isPresent())
-            throw new ConflictException(String.format("Email %s is already registered.", updateUserDto.getNewEmail()));
+        if (!Objects.equals(user.getEmail(), updateUserDto.getEmail()) && userRepository.findByEmail(updateUserDto.getEmail()).isPresent())
+            throw new ConflictException(String.format("Email %s is already registered.", updateUserDto.getEmail()));
 
         user.setFirstName(updateUserDto.getFirstName());
         user.setLastName(updateUserDto.getLastName());
-        user.setEmail(updateUserDto.getNewEmail());
+        user.setEmail(updateUserDto.getEmail());
         user.setPassword(updateUserDto.getNewPassword());
 
         User updateUser = userRepository.save(user);
