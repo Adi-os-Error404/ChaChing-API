@@ -11,7 +11,7 @@ public interface IUserService {
     UserDetailDto verifyUserCredentials(String email, String password);
     List<UserDetailDto> getAllUsers();
     UserDetailDto getUserByEmail(String email);
-    UserDetailDto updateUser(UpdateUserDto updateUserDto);
+    UserDetailDto updateUser(Long id, UpdateUserDto updateUserDto);
     void deleteUser(long id);
 
 }

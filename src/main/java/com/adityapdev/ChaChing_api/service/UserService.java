@@ -61,8 +61,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserDetailDto updateUser(UpdateUserDto updateUserDto) {
-        Optional<User> optionalUser = userRepository.findById(updateUserDto.getId());
+    public UserDetailDto updateUser(Long id, UpdateUserDto updateUserDto) {
+        Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isEmpty())
             throw new ResourceNotFoundException("User does not exist");
 
