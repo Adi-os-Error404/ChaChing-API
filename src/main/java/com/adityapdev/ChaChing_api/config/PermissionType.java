@@ -1,4 +1,4 @@
-package com.adityapdev.ChaChing_api.entity;
+package com.adityapdev.ChaChing_api.config;
 
 public enum PermissionType {
     BASE_USER,
