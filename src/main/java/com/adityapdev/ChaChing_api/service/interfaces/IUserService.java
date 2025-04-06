@@ -1,6 +1,6 @@
 package com.adityapdev.ChaChing_api.service.interfaces;
 
-import com.adityapdev.ChaChing_api.dto.UpdateUserDto;
+import com.adityapdev.ChaChing_api.dto.UpdateUserPassDto;
 import com.adityapdev.ChaChing_api.dto.UserDetailDto;
 import com.adityapdev.ChaChing_api.dto.RegisterNewUserDto;
 
@@ -11,7 +11,9 @@ public interface IUserService {
     UserDetailDto verifyUserCredentials(String email, String password);
     List<UserDetailDto> getAllUsers();
     UserDetailDto getUserByEmail(String email);
-    UserDetailDto updateUser(Long id, UpdateUserDto updateUserDto);
+    UserDetailDto updateUserName(Long id, UserDetailDto userDetailDto);
+    UserDetailDto updateUserPermission(Long id, UserDetailDto userDetailDto);
+    UserDetailDto updateUserPassword(Long id, UpdateUserPassDto updateUserPassDto);
     void deleteUser(long id);
 
 }

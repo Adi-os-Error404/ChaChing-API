@@ -3,7 +3,7 @@ package com.adityapdev.ChaChing_api.controller;
 
 import com.adityapdev.ChaChing_api.dto.LoginUserDto;
 import com.adityapdev.ChaChing_api.dto.RegisterNewUserDto;
-import com.adityapdev.ChaChing_api.dto.UpdateUserDto;
+import com.adityapdev.ChaChing_api.dto.UpdateUserPassDto;
 import com.adityapdev.ChaChing_api.dto.UserDetailDto;
 import com.adityapdev.ChaChing_api.service.interfaces.IUserService;
 import org.springframework.http.HttpStatus;
@@ -46,9 +46,21 @@ public class UserController {
         return ResponseEntity.ok(userDto);
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity<UserDetailDto> updateUserDetail(@PathVariable("id") Long id, @RequestBody UpdateUserDto updatedUserDto) {
-        UserDetailDto userDto = userService.updateUser(id, updatedUserDto);
+    @PutMapping("{id}/name")
+    public ResponseEntity<UserDetailDto> updateUserFirstLastName(@PathVariable("id") Long id, @RequestBody UserDetailDto userDetailDto) {
+        UserDetailDto userDto = userService.updateUserName(id, userDetailDto);
+        return ResponseEntity.ok(userDto);
+    }
+
+    @PutMapping("{id}/permission")
+    public ResponseEntity<UserDetailDto> updateUserPermission(@PathVariable("id") Long id, @RequestBody UserDetailDto userDetailDto) {
+        UserDetailDto userDto = userService.updateUserPermission(id, userDetailDto);
+        return ResponseEntity.ok(userDto);
+    }
+
+    @PutMapping("{id}/password")
+    public ResponseEntity<UserDetailDto> updateUserPassword(@PathVariable("id") Long id, @RequestBody UpdateUserPassDto updatedUserDto) {
+        UserDetailDto userDto = userService.updateUserPassword(id, updatedUserDto);
         return ResponseEntity.ok(userDto);
     }
 

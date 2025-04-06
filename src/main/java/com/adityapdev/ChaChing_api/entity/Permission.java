@@ -1,5 +1,6 @@
 package com.adityapdev.ChaChing_api.entity;
 
+import com.adityapdev.ChaChing_api.config.PermissionType;
 import jakarta.persistence.*;
 
 @Entity

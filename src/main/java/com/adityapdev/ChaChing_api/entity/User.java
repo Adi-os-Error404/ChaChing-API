@@ -21,14 +21,19 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @ManyToOne
+    @JoinColumn(name = "permission_id", nullable = false)
+    private Permission permission;
+
     public User() {}
 
-    public User(Long id, String firstName, String lastName, String email, String password) {
+    public User(Long id, String firstName, String lastName, String email, String password, Permission permission) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.permission = permission;
     }
 
     public Long getId() {
@@ -65,6 +70,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Permission getPermission() {
+        return permission;
+    }
+
+    public void setPermission(Permission permission) {
+        this.permission = permission;
     }
 
 }

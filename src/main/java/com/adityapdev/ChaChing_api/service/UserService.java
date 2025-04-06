@@ -1,13 +1,16 @@
 package com.adityapdev.ChaChing_api.service;
 
+import com.adityapdev.ChaChing_api.config.PermissionType;
 import com.adityapdev.ChaChing_api.dto.RegisterNewUserDto;
-import com.adityapdev.ChaChing_api.dto.UpdateUserDto;
+import com.adityapdev.ChaChing_api.dto.UpdateUserPassDto;
 import com.adityapdev.ChaChing_api.dto.UserDetailDto;
+import com.adityapdev.ChaChing_api.entity.Permission;
 import com.adityapdev.ChaChing_api.entity.User;
 import com.adityapdev.ChaChing_api.exception.ConflictException;
 import com.adityapdev.ChaChing_api.exception.ResourceNotFoundException;
 import com.adityapdev.ChaChing_api.exception.UnauthorizedException;
 import com.adityapdev.ChaChing_api.mapper.UserMapper;
+import com.adityapdev.ChaChing_api.repository.PermissionRepository;
 import com.adityapdev.ChaChing_api.repository.UserRepository;
 import com.adityapdev.ChaChing_api.service.interfaces.IUserService;
 import org.springframework.stereotype.Service;
@@ -20,10 +23,12 @@ import java.util.stream.Collectors;
 @Service
 public class UserService implements IUserService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final PermissionRepository permissionRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PermissionRepository permissionRepository) {
         this.userRepository = userRepository;
+        this.permissionRepository = permissionRepository;
     }
 
     @Override
@@ -31,8 +36,8 @@ public class UserService implements IUserService {
         Optional<User> existingUser = userRepository.findByEmail(registerNewUserDto.getEmail());
         if (existingUser.isPresent())
             throw new ConflictException(String.format("Email \"%s\" is already registered.", registerNewUserDto.getEmail()));
-
-        User user = UserMapper.mapToUser(registerNewUserDto);
+        Permission permission = validatePermissionType(registerNewUserDto.getPermissionType());
+        User user = UserMapper.mapToUser(registerNewUserDto, permission);
         User savedUser = userRepository.save(user);
         return UserMapper.mapToUserDto(savedUser);
     }
@@ -41,9 +46,7 @@ public class UserService implements IUserService {
     public UserDetailDto verifyUserCredentials(String email, String password) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ConflictException(String.format("Email \"%s\" is not registered.", email)));
-
-        if (!Objects.equals(user.getPassword(), password))
-            throw new UnauthorizedException("Password entered is incorrect.");
+        validatePassword(user.getPassword(), password);
         return UserMapper.mapToUserDto(user);
     }
 
@@ -61,33 +64,57 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserDetailDto updateUser(Long id, UpdateUserDto updateUserDto) {
-        Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.isEmpty())
-            throw new ResourceNotFoundException("User does not exist");
+    public UserDetailDto updateUserName(Long id, UserDetailDto userDetailDto) {
+        User user = getUserById(id);
+        user.setFirstName(userDetailDto.getFirstName());
+        user.setLastName(userDetailDto.getLastName());
+        User updateUser = userRepository.save(user);
+        return UserMapper.mapToUserDto(updateUser);
+    }
 
-        User user = optionalUser.get();
+    @Override
+    public UserDetailDto updateUserPermission(Long id, UserDetailDto userDetailDto) {
+        User user = getUserById(id);
+        Permission permission = validatePermissionType(userDetailDto.getPermissionType());
+        user.setPermission(permission);
+        User updateUser = userRepository.save(user);
+        return UserMapper.mapToUserDto(updateUser);
+    }
 
-        if (!Objects.equals(user.getPassword(), updateUserDto.getCurrentPassword()))
-            throw new UnauthorizedException("Current password is incorrect.");
-
-        if (!Objects.equals(user.getEmail(), updateUserDto.getEmail()) && userRepository.findByEmail(updateUserDto.getEmail()).isPresent())
-            throw new ConflictException(String.format("Email \"%s\" is already registered.", updateUserDto.getEmail()));
-
-        user.setFirstName(updateUserDto.getFirstName());
-        user.setLastName(updateUserDto.getLastName());
-        user.setEmail(updateUserDto.getEmail());
-        user.setPassword(updateUserDto.getNewPassword());
-
+    @Override
+    public UserDetailDto updateUserPassword(Long id, UpdateUserPassDto updateUserPassDto) {
+        User user = getUserById(id);
+        validatePassword(user.getPassword(), updateUserPassDto.getCurrentPassword());
+        user.setPassword(updateUserPassDto.getNewPassword());
         User updateUser = userRepository.save(user);
         return UserMapper.mapToUserDto(updateUser);
     }
 
     @Override
     public void deleteUser(long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("User with id \"%d\" does not exist.", id)));
+        User user = getUserById(id);
         userRepository.deleteById(id);
+    }
+
+    // Helpers:
+    private User getUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("User with id \"%d\" does not exist", id)));
+    }
+    private void validatePassword(String enteredPassword, String actualPassword) {
+        if (!Objects.equals(enteredPassword, actualPassword))
+            throw new UnauthorizedException("Current password is incorrect.");
+    }
+
+    private Permission validatePermissionType(String permissionTypeStr) {
+        PermissionType permissionType;
+        try {
+            permissionType = PermissionType.valueOf(permissionTypeStr);
+        } catch (IllegalArgumentException e) {
+            throw new ConflictException("Invalid permission type: " + permissionTypeStr);
+        }
+        return permissionRepository.findByPermissionType(permissionType)
+                .orElseThrow(() -> new ConflictException("Invalid permission type"));
     }
 
 }
