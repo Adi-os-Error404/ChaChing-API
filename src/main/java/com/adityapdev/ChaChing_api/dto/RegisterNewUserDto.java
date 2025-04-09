@@ -7,8 +7,8 @@ public class RegisterNewUserDto extends UserDto{
 
     private final String password;
 
-    public RegisterNewUserDto(Long id, String firstName, String lastName, String email, String password, String permissionType) {
-        super(id, firstName, lastName, email, permissionType);
+    public RegisterNewUserDto(Long id, String firstName, String lastName, String email, String password) {
+        super(id, firstName, lastName, email, PermissionType.BASE_USER.toString());
         this.password = Security.hashPassword(password);
     }
 
