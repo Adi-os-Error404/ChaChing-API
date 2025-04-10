@@ -1,8 +1,8 @@
 package com.adityapdev.ChaChing_api.service.interfaces;
 
-import com.adityapdev.ChaChing_api.dto.UpdateUserPassDto;
-import com.adityapdev.ChaChing_api.dto.UserDetailDto;
-import com.adityapdev.ChaChing_api.dto.RegisterNewUserDto;
+import com.adityapdev.ChaChing_api.dto.user.UpdateUserPassDto;
+import com.adityapdev.ChaChing_api.dto.user.UserDetailDto;
+import com.adityapdev.ChaChing_api.dto.user.RegisterNewUserDto;
 
 import java.util.List;
 

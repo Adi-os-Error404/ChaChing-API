@@ -1,4 +1,4 @@
-package com.adityapdev.ChaChing_api.dto;
+package com.adityapdev.ChaChing_api.dto.user;
 
 import com.adityapdev.ChaChing_api.config.PermissionType;
 import com.adityapdev.ChaChing_api.util.Security;

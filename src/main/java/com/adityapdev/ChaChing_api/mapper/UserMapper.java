@@ -1,8 +1,7 @@
 package com.adityapdev.ChaChing_api.mapper;
 
-import com.adityapdev.ChaChing_api.config.PermissionType;
-import com.adityapdev.ChaChing_api.dto.RegisterNewUserDto;
-import com.adityapdev.ChaChing_api.dto.UserDetailDto;
+import com.adityapdev.ChaChing_api.dto.user.RegisterNewUserDto;
+import com.adityapdev.ChaChing_api.dto.user.UserDetailDto;
 import com.adityapdev.ChaChing_api.entity.Permission;
 import com.adityapdev.ChaChing_api.entity.User;
 

@@ -1,6 +1,4 @@
-package com.adityapdev.ChaChing_api.dto;
-
-import com.adityapdev.ChaChing_api.config.PermissionType;
+package com.adityapdev.ChaChing_api.dto.user;
 
 public class UserDetailDto extends UserDto{
 

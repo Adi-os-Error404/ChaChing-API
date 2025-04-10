@@ -1,10 +1,10 @@
 package com.adityapdev.ChaChing_api.controller;
 
 
-import com.adityapdev.ChaChing_api.dto.LoginUserDto;
-import com.adityapdev.ChaChing_api.dto.RegisterNewUserDto;
-import com.adityapdev.ChaChing_api.dto.UpdateUserPassDto;
-import com.adityapdev.ChaChing_api.dto.UserDetailDto;
+import com.adityapdev.ChaChing_api.dto.user.LoginUserDto;
+import com.adityapdev.ChaChing_api.dto.user.RegisterNewUserDto;
+import com.adityapdev.ChaChing_api.dto.user.UpdateUserPassDto;
+import com.adityapdev.ChaChing_api.dto.user.UserDetailDto;
 import com.adityapdev.ChaChing_api.service.interfaces.IUserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
