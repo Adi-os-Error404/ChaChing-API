@@ -29,7 +29,7 @@ public class Coin {
     private BigDecimal marketCap;
 
     @OneToMany(mappedBy = "coin", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<>();
+    private List<Comment> comments;
 
     public Coin() {}
 
@@ -39,30 +39,19 @@ public class Coin {
         this.name = name;
         this.currentPrice = currentPrice;
         this.marketCap = marketCap;
+        this.comments = new ArrayList<>();
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getCoinId() {
         return coinId;
     }
 
-    public void setCoinId(String coinId) {
-        this.coinId = coinId;
-    }
-
     public String getSymbol() {
         return symbol;
-    }
-
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
     }
 
     public String getName() {
@@ -83,10 +72,6 @@ public class Coin {
 
     public BigDecimal getMarketCap() {
         return marketCap;
-    }
-
-    public void setMarketCap(BigDecimal marketCap) {
-        this.marketCap = marketCap;
     }
 
     public List<Comment> getComments() {
