@@ -5,7 +5,6 @@ import com.adityapdev.ChaChing_api.dto.user.UserDetailDto;
 import com.adityapdev.ChaChing_api.entity.Permission;
 import com.adityapdev.ChaChing_api.entity.User;
 
-// remove this class - we do not need this for users
 public class UserMapper {
     public static UserDetailDto mapToUserDto(User user) {
         return new UserDetailDto(
