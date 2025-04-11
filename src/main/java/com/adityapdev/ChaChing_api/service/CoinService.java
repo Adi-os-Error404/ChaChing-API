@@ -52,15 +52,16 @@ public class CoinService implements ICoinService {
         return CoinMapper.mapToCoinDto(savedCoin);
     }
 
-    private Coin findCoinById(String coinId) {
-        return coinRepository.findByCoinId(coinId)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("Coin \"%s\" is not found.", coinId)));
-    }
-
     @Override
     public void deleteCoin(String coinId) {
         Coin coin = findCoinById(coinId);
         coinRepository.deleteById(coin.getId());
+    }
+
+    @Override
+    public Coin findCoinById(String coinId) {
+        return coinRepository.findByCoinId(coinId)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Coin \"%s\" is not found.", coinId)));
     }
 
 }
