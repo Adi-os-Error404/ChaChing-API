@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface ICommentService {
     CommentDetailDto addComment(String coinId, AddCommentDto addCommentDto);
-    CommentDetailDto updateComment(String coinId, EditCommentDto editCommentDto);
+    CommentDetailDto updateComment(EditCommentDto editCommentDto);
+    void deleteComment(Long commentId);
 }
