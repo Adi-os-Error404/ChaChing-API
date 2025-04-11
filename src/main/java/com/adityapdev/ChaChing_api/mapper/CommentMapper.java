@@ -7,14 +7,13 @@ import com.adityapdev.ChaChing_api.entity.Comment;
 
 public class CommentMapper {
 
-    public static CommentDetailDto mapToCommentDto(Comment comment, String coinId) {
+    public static CommentDetailDto mapToCommentDto(Comment comment) {
         return new CommentDetailDto(
                 comment.getId(),
                 comment.getTitle(),
                 comment.getContent(),
                 comment.getCreatedOn(),
-                comment.getEditedOn(),
-                coinId
+                comment.getEditedOn()
         );
     }
 
