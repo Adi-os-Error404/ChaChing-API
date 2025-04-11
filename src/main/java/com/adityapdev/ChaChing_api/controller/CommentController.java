@@ -29,10 +29,16 @@ public class CommentController {
         return new ResponseEntity<>(createdComment, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{coinId}")
-    public ResponseEntity<CommentDetailDto> updateComment(@PathVariable String coinId, @RequestBody EditCommentDto editCommentDto) {
-        CommentDetailDto updatedComment = commentService.updateComment(coinId, editCommentDto);
+    @PutMapping
+    public ResponseEntity<CommentDetailDto> updateComment(@RequestBody EditCommentDto editCommentDto) {
+        CommentDetailDto updatedComment = commentService.updateComment(editCommentDto);
         return new ResponseEntity<>(updatedComment, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<String> deleteComment(@PathVariable Long commentId) {
+        commentService.deleteComment(commentId);
+        return ResponseEntity.ok(String.format("Comment \"%d\" is deleted successfully.", commentId));
     }
 
 }
