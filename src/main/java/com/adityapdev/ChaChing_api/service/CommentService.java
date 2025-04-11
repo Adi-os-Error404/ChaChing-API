@@ -39,16 +39,25 @@ public class CommentService implements ICommentService {
     }
 
     @Override
-    public CommentDetailDto updateComment(String coinId, EditCommentDto editCommentDto) {
+    public CommentDetailDto updateComment(EditCommentDto editCommentDto) {
         Long commentId = editCommentDto.getId();
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("Comment \"%d\" does not exist.", commentId)));
-        Coin coin = coinService.findCoinById(coinId);
+        Comment comment = findCommentById(commentId);
         comment.setTitle(editCommentDto.getTitle());
         comment.setContent(editCommentDto.getContent());
         comment.setEditedOn(Instant.now());
         Comment savedComment =  commentRepository.save(comment);
         return CommentMapper.mapToCommentDto(savedComment);
+    }
+
+    @Override
+    public void deleteComment(Long commentId) {
+        findCommentById(commentId);
+        commentRepository.deleteById(commentId);
+    }
+
+    private Comment findCommentById(Long commentId) {
+        return commentRepository.findById(commentId)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Comment \"%d\" does not exist.", commentId)));
     }
 
 
