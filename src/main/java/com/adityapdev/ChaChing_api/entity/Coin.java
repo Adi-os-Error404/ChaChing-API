@@ -78,8 +78,8 @@ public class Coin {
         return comments;
     }
 
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
     }
 
 }
