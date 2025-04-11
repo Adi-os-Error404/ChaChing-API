@@ -12,7 +12,7 @@ public class CoinMapper {
 
     public static CoinDetailDto mapToCoinDto(Coin coin) {
         List<CommentDetailDto> commentDtos = coin.getComments().stream()
-                .map(e -> CommentMapper.mapToCommentDto(e, coin.getCoinId()))
+                .map(CommentMapper::mapToCommentDto)
                 .collect(Collectors.toList());
 
         return new CoinDetailDto(
