@@ -31,8 +31,11 @@ public class UserService implements IUserService {
     private final UserRepository userRepository;
     private final PermissionRepository permissionRepository;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private JWTService jwtService;
 
     public UserService(UserRepository userRepository, PermissionRepository permissionRepository) {
         this.userRepository = userRepository;
@@ -63,7 +66,7 @@ public class UserService implements IUserService {
             Authentication auth = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(username, password));
             if (auth.isAuthenticated()) {
-                return "Success";
+                return jwtService.generateToken(username);
             }
         } catch (Exception e) {
             throw new UnauthorizedException(failRes);
