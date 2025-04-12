@@ -13,6 +13,7 @@ import com.adityapdev.ChaChing_api.mapper.UserMapper;
 import com.adityapdev.ChaChing_api.repository.PermissionRepository;
 import com.adityapdev.ChaChing_api.repository.UserRepository;
 import com.adityapdev.ChaChing_api.service.interfaces.IUserService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class UserService implements IUserService {
 
     private final UserRepository userRepository;
     private final PermissionRepository permissionRepository;
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public UserService(UserRepository userRepository, PermissionRepository permissionRepository) {
         this.userRepository = userRepository;
@@ -33,10 +35,16 @@ public class UserService implements IUserService {
 
     @Override
     public UserDetailDto registerNewUser(RegisterNewUserDto registerNewUserDto) {
-        Optional<User> existingUser = userRepository.findByEmail(registerNewUserDto.getEmail());
-        if (existingUser.isPresent())
+        Optional<User> existingUserEmail = userRepository.findByEmail(registerNewUserDto.getEmail());
+        Optional<User> existingUserName = userRepository.findByUsername(registerNewUserDto.getUsername());
+
+        if (existingUserEmail.isPresent())
             throw new ConflictException(String.format("Email \"%s\" is already registered.", registerNewUserDto.getEmail()));
+        if (existingUserName.isPresent())
+            throw new ConflictException(String.format("Username \"%s\" is already registered.", registerNewUserDto.getUsername()));
+
         Permission permission = validatePermissionType(registerNewUserDto.getPermissionType());
+        registerNewUserDto.setPassword(encoder.encode(registerNewUserDto.getPassword()));
         User user = UserMapper.mapToUser(registerNewUserDto, permission);
         User savedUser = userRepository.save(user);
         return UserMapper.mapToUserDto(savedUser);
