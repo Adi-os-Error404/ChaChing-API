@@ -18,6 +18,9 @@ public class User {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
+    @Column(name = "username", nullable = false, unique = true)
+    private String username;
+
     @Column(name = "password", nullable = false)
     private String password;
 
@@ -27,10 +30,11 @@ public class User {
 
     public User() {}
 
-    public User(Long id, String firstName, String lastName, String email, String password, Permission permission) {
+    public User(Long id, String firstName, String lastName, String username, String email, String password, Permission permission) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.username = username;
         this.email = email;
         this.password = password;
         this.permission = permission;
@@ -38,6 +42,10 @@ public class User {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -62,6 +70,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
