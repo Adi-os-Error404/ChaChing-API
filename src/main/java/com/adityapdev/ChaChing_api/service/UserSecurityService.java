@@ -2,7 +2,6 @@ package com.adityapdev.ChaChing_api.service;
 
 import com.adityapdev.ChaChing_api.entity.User;
 import com.adityapdev.ChaChing_api.entity.UserPrincipal;
-import com.adityapdev.ChaChing_api.exception.ResourceNotFoundException;
 import com.adityapdev.ChaChing_api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
