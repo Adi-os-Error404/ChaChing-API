@@ -7,8 +7,8 @@ public class UpdateUserPassDto extends UserDto{
     private final String currentPassword;
     private final String newPassword;
 
-    public UpdateUserPassDto(Long id, String firstName, String lastName, String email, String currentPassword, String newPassword, String permissionType) {
-        super(id, firstName, lastName, email, permissionType);
+    public UpdateUserPassDto(Long id, String firstName, String lastName, String username, String email, String currentPassword, String newPassword, String permissionType) {
+        super(id, firstName, lastName, username, email, permissionType);
         this.currentPassword = Security.hashPassword(currentPassword);
         this.newPassword = Security.hashPassword(newPassword);
     }
