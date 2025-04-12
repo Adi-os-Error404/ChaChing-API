@@ -11,6 +11,7 @@ public class UserMapper {
                 user.getId(),
                 user.getFirstName(),
                 user.getLastName(),
+                user.getUsername(),
                 user.getEmail(),
                 user.getPermission().getPermissionType().toString()
         );
@@ -20,6 +21,7 @@ public class UserMapper {
                 registerNewUserDto.getId(),
                 registerNewUserDto.getFirstName(),
                 registerNewUserDto.getLastName(),
+                registerNewUserDto.getUsername(),
                 registerNewUserDto.getEmail(),
                 registerNewUserDto.getPassword(),
                 permission
