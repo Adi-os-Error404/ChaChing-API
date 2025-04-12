@@ -13,6 +13,10 @@ import com.adityapdev.ChaChing_api.mapper.UserMapper;
 import com.adityapdev.ChaChing_api.repository.PermissionRepository;
 import com.adityapdev.ChaChing_api.repository.UserRepository;
 import com.adityapdev.ChaChing_api.service.interfaces.IUserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +31,8 @@ public class UserService implements IUserService {
     private final UserRepository userRepository;
     private final PermissionRepository permissionRepository;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     public UserService(UserRepository userRepository, PermissionRepository permissionRepository) {
         this.userRepository = userRepository;
@@ -51,11 +57,18 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserDetailDto verifyUserCredentials(String email, String password) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ConflictException(String.format("Email \"%s\" is not registered.", email)));
-        validatePassword(user.getPassword(), password);
-        return UserMapper.mapToUserDto(user);
+    public String verifyUserCredentials(String username, String password) {
+        String failRes = "Username or Password is incorrect";
+        try {
+            Authentication auth = authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            if (auth.isAuthenticated()) {
+                return "Success";
+            }
+        } catch (Exception e) {
+            throw new UnauthorizedException(failRes);
+        }
+        return failRes;
     }
 
     @Override

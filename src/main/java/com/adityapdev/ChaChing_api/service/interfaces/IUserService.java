@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IUserService {
     UserDetailDto registerNewUser(RegisterNewUserDto registerNewUserDto);
-    UserDetailDto verifyUserCredentials(String email, String password);
+    String verifyUserCredentials(String username, String password);
     List<UserDetailDto> getAllUsers();
     UserDetailDto getUserByEmail(String email);
     UserDetailDto updateUserName(Long id, UserDetailDto userDetailDto);
