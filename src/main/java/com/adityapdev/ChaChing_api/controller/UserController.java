@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/users")
@@ -29,9 +30,9 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserDetailDto> loginUser(@RequestBody LoginUserDto loginUserDto) {
-        UserDetailDto userDto = userService.verifyUserCredentials(loginUserDto.getEmail(), loginUserDto.getPassword());
-        return ResponseEntity.ok(userDto);
+    public ResponseEntity<String> loginUser(@RequestBody LoginUserDto loginUserDto) {
+        String res = userService.verifyUserCredentials(loginUserDto.getUsername(), loginUserDto.getPassword());
+        return ResponseEntity.ok(res);
     }
 
     @GetMapping
