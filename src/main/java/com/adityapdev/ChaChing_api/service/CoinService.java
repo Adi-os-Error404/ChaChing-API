@@ -1,9 +1,7 @@
 package com.adityapdev.ChaChing_api.service;
 
-import com.adityapdev.ChaChing_api.dto.coin.AddCoinDto;
-import com.adityapdev.ChaChing_api.dto.coin.CoinCommentDetailDto;
+import com.adityapdev.ChaChing_api.dto.coin.CoinAllDetailsDto;
 import com.adityapdev.ChaChing_api.entity.Coin;
-import com.adityapdev.ChaChing_api.exception.ConflictException;
 import com.adityapdev.ChaChing_api.exception.ResourceNotFoundException;
 import com.adityapdev.ChaChing_api.mapper.CoinMapper;
 import com.adityapdev.ChaChing_api.repository.CoinRepository;
@@ -11,7 +9,6 @@ import com.adityapdev.ChaChing_api.service.interfaces.ICoinGeckoService;
 import com.adityapdev.ChaChing_api.service.interfaces.ICoinService;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,31 +24,14 @@ public class CoinService implements ICoinService {
     }
 
     @Override
-    public CoinCommentDetailDto addCoin(AddCoinDto addCoinDto) {
-        if (coinRepository.findByCoinId(addCoinDto.getCoinId()).isPresent())
-            throw new ConflictException(String.format("Coin \"%s\" is already exists.", addCoinDto.getCoinId()));
-        Coin coin = CoinMapper.mapToCoin(addCoinDto);
-        Coin savedCoin = coinRepository.save(coin);
-        return CoinMapper.mapToCoinDto(savedCoin);
-    }
-
-    @Override
-    public List<CoinCommentDetailDto> getAllCoins() {
+    public List<CoinAllDetailsDto> getAllCoins() {
         List<Coin> coins = coinRepository.findAll();
         return coins.stream().map(CoinMapper::mapToCoinDto).collect(Collectors.toList());
     }
 
     @Override
-    public CoinCommentDetailDto getCoinById(String coinId) {
+    public CoinAllDetailsDto getCoinById(String coinId) {
         return CoinMapper.mapToCoinDto(findCoinById(coinId));
-    }
-
-    @Override
-    public CoinCommentDetailDto updateCurrentPrice(String coinId, BigDecimal currentPriceUsd) {
-        Coin coin = findCoinById(coinId);
-        coin.setCurrentPrice(currentPriceUsd);
-        Coin savedCoin = coinRepository.save(coin);
-        return CoinMapper.mapToCoinDto(savedCoin);
     }
 
     @Override
