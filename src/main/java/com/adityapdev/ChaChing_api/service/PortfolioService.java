@@ -4,6 +4,7 @@ import com.adityapdev.ChaChing_api.dto.portfolio.CoinInPortfolioDto;
 import com.adityapdev.ChaChing_api.entity.Coin;
 import com.adityapdev.ChaChing_api.entity.User;
 import com.adityapdev.ChaChing_api.entity.UserCoin;
+import com.adityapdev.ChaChing_api.exception.ResourceNotFoundException;
 import com.adityapdev.ChaChing_api.mapper.PortfolioMapper;
 import com.adityapdev.ChaChing_api.repository.CoinRepository;
 import com.adityapdev.ChaChing_api.repository.UserCoinRepository;
@@ -42,6 +43,17 @@ public class PortfolioService implements IPortfolioService {
         UserCoin userCoin = new UserCoin(user, coin);
         userCoinRepository.save(userCoin);
         return PortfolioMapper.mapToPortfolioDto(coin);
+    }
+
+    @Override
+    public String removeCoinFromUserPort(String coinId) {
+        User user = userService.getCurrentUser();
+        Coin coin = coinService.findCoinById(coinId);
+        UserCoin userCoin = userCoinRepository.findByUserIdAndCoinId(user.getId(), coin.getId());
+        if (userCoin == null)
+            throw new ResourceNotFoundException(coinId + " is not in portfolio.");
+        userCoinRepository.deleteById(userCoin.getId());
+        return coin.getName() + " removed from portfolio successfully.";
     }
 
 
