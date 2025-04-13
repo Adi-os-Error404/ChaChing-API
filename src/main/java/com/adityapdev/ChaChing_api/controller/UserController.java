@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/account")
 public class UserController {
 
     private IUserService userService;
@@ -32,26 +32,26 @@ public class UserController {
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("/account")
+    @GetMapping
     public ResponseEntity<UserDetailDto> getUserDetails() {
         UserDetailDto userDto = userService.getLoggedInUser();
         return ResponseEntity.ok(userDto);
     }
 
-    @PutMapping("/account/name")
+    @PutMapping("/name")
     public ResponseEntity<UserDetailDto> updateUserFirstLastName(@RequestBody UpdateUserNamesDto updateUserNamesDto) {
         UserDetailDto userDto = userService.updateUserFirstLastName(updateUserNamesDto);
         return ResponseEntity.ok(userDto);
     }
 
 
-    @PutMapping("/account/password")
+    @PutMapping("/password")
     public ResponseEntity<UserDetailDto> updateUserPassword(@RequestBody UpdateUserPassDto updatedUserDto) {
         UserDetailDto userDto = userService.updateUserPassword(updatedUserDto);
         return ResponseEntity.ok(userDto);
     }
 
-    @DeleteMapping("/account")
+    @DeleteMapping
     public ResponseEntity<String> deleteUser(@RequestBody LoginUserDto loginUserDto) {
         userService.deleteUser(loginUserDto);
         return ResponseEntity.ok("User deleted successfully.");
