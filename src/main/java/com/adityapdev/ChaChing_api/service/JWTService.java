@@ -66,7 +66,7 @@ public class JWTService {
     // Helpers:
 
     private int convertMinsToMilliSecs(int mins) {
-        return mins * 60 * 60;
+        return mins * 60 * 1000;
     }
 
     private SecretKey getKey() {
