@@ -3,14 +3,15 @@ package com.adityapdev.ChaChing_api.service;
 import com.adityapdev.ChaChing_api.dto.coin.CoinGeckoDto;
 import com.adityapdev.ChaChing_api.entity.Coin;
 import com.adityapdev.ChaChing_api.exception.ResourceNotFoundException;
+import com.adityapdev.ChaChing_api.mapper.CoinMapper;
 import com.adityapdev.ChaChing_api.service.interfaces.ICoinGeckoService;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 public class CoinGeckoService implements ICoinGeckoService {
 
+    public final static String CURRENCY = "usd";
     private final RestTemplate restTemplate = new RestTemplate();
-    private final static String currency = "usd";
 
     @Override
     public Coin getCoinByCoinId(String coinId) {
@@ -18,13 +19,8 @@ public class CoinGeckoService implements ICoinGeckoService {
 
         try {
             CoinGeckoDto details = restTemplate.getForObject(coinDetailsApi, CoinGeckoDto.class);
-            return new Coin(
-                    details.id,
-                    details.symbol,
-                    details.name,
-                    details.market_data.current_price.get(currency),
-                    details.market_data.market_cap.get(currency)
-            );
+            return CoinMapper.mapToCoin(details, CURRENCY);
+
         } catch (RestClientException ex) {
             throw new ResourceNotFoundException(coinId + "does not exist.");
         }
