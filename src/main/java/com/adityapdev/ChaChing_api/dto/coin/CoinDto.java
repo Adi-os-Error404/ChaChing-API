@@ -12,16 +12,14 @@ public abstract class CoinDto {
     private String symbol;
     private String name;
     private BigDecimal currentPrice;
-    private BigDecimal marketCap;
-    private List<CommentDetailDto> comments;
+    private Long marketCap;
 
-    public CoinDto(String coinId, String symbol, String name, BigDecimal currentPrice, BigDecimal marketCap, List<CommentDetailDto> comments) {
+    public CoinDto(String coinId, String symbol, String name, BigDecimal currentPrice, Long marketCap) {
         this.coinId = coinId;
         this.symbol = symbol;
         this.name = name;
         this.currentPrice = currentPrice;
         this.marketCap = marketCap;
-        this.comments = (comments != null) ? comments : new ArrayList<>();
     }
 
     public String getCoinId() {
@@ -56,19 +54,12 @@ public abstract class CoinDto {
         this.currentPrice = currentPrice;
     }
 
-    public BigDecimal getMarketCap() {
+    public Long getMarketCap() {
         return marketCap;
     }
 
-    public void setMarketCap(BigDecimal marketCap) {
+    public void setMarketCap(Long marketCap) {
         this.marketCap = marketCap;
     }
 
-    public List<CommentDetailDto> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<CommentDetailDto> comments) {
-        this.comments = comments;
-    }
 }
