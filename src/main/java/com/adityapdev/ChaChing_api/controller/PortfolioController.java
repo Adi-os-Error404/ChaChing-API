@@ -30,4 +30,10 @@ public class PortfolioController {
         return new ResponseEntity<>(addedCoin, HttpStatus.OK);
     }
 
+    @DeleteMapping
+    public ResponseEntity<String> removeCoinFromPortfolio(@RequestParam String coinId) {
+        String res = portfolioService.removeCoinFromUserPort(coinId);
+        return new ResponseEntity<>(res,HttpStatus.OK);
+    }
+
 }
