@@ -1,7 +1,7 @@
 package com.adityapdev.ChaChing_api.controller;
 
 import com.adityapdev.ChaChing_api.dto.coin.AddCoinDto;
-import com.adityapdev.ChaChing_api.dto.coin.CoinDetailDto;
+import com.adityapdev.ChaChing_api.dto.coin.CoinCommentDetailDto;
 import com.adityapdev.ChaChing_api.service.interfaces.ICoinService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,26 +21,26 @@ public class CoinController {
     }
 
     @PostMapping
-    public ResponseEntity<CoinDetailDto> addCoin(@RequestBody AddCoinDto addCoinDto) {
-        CoinDetailDto createdCoin = coinService.addCoin(addCoinDto);
+    public ResponseEntity<CoinCommentDetailDto> addCoin(@RequestBody AddCoinDto addCoinDto) {
+        CoinCommentDetailDto createdCoin = coinService.addCoin(addCoinDto);
         return new ResponseEntity<>(createdCoin, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<CoinDetailDto>> getAllCoins() {
-        List<CoinDetailDto> coins = coinService.getAllCoins();
+    public ResponseEntity<List<CoinCommentDetailDto>> getAllCoins() {
+        List<CoinCommentDetailDto> coins = coinService.getAllCoins();
         return new ResponseEntity<>(coins, HttpStatus.OK);
     }
 
     @GetMapping("/{coinId}")
-    public ResponseEntity<CoinDetailDto> getCoinById(@PathVariable String coinId) {
-        CoinDetailDto coin = coinService.getCoinById(coinId);
+    public ResponseEntity<CoinCommentDetailDto> getCoinById(@PathVariable String coinId) {
+        CoinCommentDetailDto coin = coinService.getCoinById(coinId);
         return new ResponseEntity<>(coin, HttpStatus.OK);
     }
 
     @PutMapping("/{coinId}/price")
-    public ResponseEntity<CoinDetailDto> updateCurrentPrice(@PathVariable String coinId, @RequestBody BigDecimal currentPriceUsd) {
-        CoinDetailDto updatedCoin = coinService.updateCurrentPrice(coinId, currentPriceUsd);
+    public ResponseEntity<CoinCommentDetailDto> updateCurrentPrice(@PathVariable String coinId, @RequestBody BigDecimal currentPriceUsd) {
+        CoinCommentDetailDto updatedCoin = coinService.updateCurrentPrice(coinId, currentPriceUsd);
         return new ResponseEntity<>(updatedCoin, HttpStatus.OK);
     }
 
