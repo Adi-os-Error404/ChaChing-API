@@ -7,6 +7,7 @@ import com.adityapdev.ChaChing_api.exception.ResourceNotFoundException;
 import com.adityapdev.ChaChing_api.exception.UnauthorizedException;
 import com.adityapdev.ChaChing_api.mapper.UserMapper;
 import com.adityapdev.ChaChing_api.repository.UserRepository;
+import com.adityapdev.ChaChing_api.service.interfaces.IJWTService;
 import com.adityapdev.ChaChing_api.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,7 +31,7 @@ public class UserService implements IUserService {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
-    private JWTService jwtService;
+    private IJWTService jwtService;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;

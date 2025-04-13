@@ -1,7 +1,7 @@
 package com.adityapdev.ChaChing_api.config;
 
-import com.adityapdev.ChaChing_api.service.JWTService;
 import com.adityapdev.ChaChing_api.service.UserSecurityService;
+import com.adityapdev.ChaChing_api.service.interfaces.IJWTService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +23,7 @@ import java.io.IOException;
 public class JwtFilter extends OncePerRequestFilter {
 
     @Autowired
-    private JWTService jwtService;
+    private IJWTService jwtService;
     @Autowired
     ApplicationContext context;
 
