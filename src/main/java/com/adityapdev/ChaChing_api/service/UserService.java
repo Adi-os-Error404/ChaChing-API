@@ -110,7 +110,7 @@ public class UserService implements IUserService {
     }
 
     // Helpers:
-    private User getCurrentUser() {
+    public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         return userRepository.findByUsername(userName)
