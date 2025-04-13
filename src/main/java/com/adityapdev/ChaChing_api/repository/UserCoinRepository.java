@@ -13,4 +13,7 @@ public interface UserCoinRepository extends JpaRepository<UserCoin, Long> {
     @Query("SELECT uc.coin FROM UserCoin uc WHERE uc.user.id = :userId")
     List<Coin> findCoinsByUserId(@Param("userId") Long userId);
 
+    @Query("SELECT uc FROM UserCoin uc WHERE uc.user.id = :userId AND uc.coin.id = :coinId")
+    UserCoin findByUserIdAndCoinId(@Param("userId") Long userId, @Param("coinId") Long coinId);
+
 }
