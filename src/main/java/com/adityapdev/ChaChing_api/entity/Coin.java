@@ -26,14 +26,14 @@ public class Coin {
     private BigDecimal currentPrice;
 
     @Column(name = "market_cap", nullable = false)
-    private BigDecimal marketCap;
+    private Long marketCap;
 
     @OneToMany(mappedBy = "coin", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 
     public Coin() {}
 
-    public Coin(String coinId, String symbol, String name, BigDecimal currentPrice, BigDecimal marketCap) {
+    public Coin(String coinId, String symbol, String name, BigDecimal currentPrice, Long marketCap) {
         this.coinId = coinId;
         this.symbol = symbol;
         this.name = name;
@@ -70,7 +70,7 @@ public class Coin {
         this.currentPrice = currentPrice;
     }
 
-    public BigDecimal getMarketCap() {
+    public Long getMarketCap() {
         return marketCap;
     }
 
