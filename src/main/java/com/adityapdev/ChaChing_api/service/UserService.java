@@ -1,22 +1,18 @@
 package com.adityapdev.ChaChing_api.service;
 
-import com.adityapdev.ChaChing_api.config.PermissionType;
-import com.adityapdev.ChaChing_api.dto.user.RegisterNewUserDto;
-import com.adityapdev.ChaChing_api.dto.user.UpdateUserPassDto;
-import com.adityapdev.ChaChing_api.dto.user.UserDetailDto;
-import com.adityapdev.ChaChing_api.entity.Permission;
+import com.adityapdev.ChaChing_api.dto.user.*;
 import com.adityapdev.ChaChing_api.entity.User;
 import com.adityapdev.ChaChing_api.exception.ConflictException;
 import com.adityapdev.ChaChing_api.exception.ResourceNotFoundException;
 import com.adityapdev.ChaChing_api.exception.UnauthorizedException;
 import com.adityapdev.ChaChing_api.mapper.UserMapper;
-import com.adityapdev.ChaChing_api.repository.PermissionRepository;
 import com.adityapdev.ChaChing_api.repository.UserRepository;
 import com.adityapdev.ChaChing_api.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +25,6 @@ import java.util.stream.Collectors;
 public class UserService implements IUserService {
 
     private final UserRepository userRepository;
-    private final PermissionRepository permissionRepository;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @Autowired
@@ -37,24 +32,24 @@ public class UserService implements IUserService {
     @Autowired
     private JWTService jwtService;
 
-    public UserService(UserRepository userRepository, PermissionRepository permissionRepository) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.permissionRepository = permissionRepository;
     }
 
     @Override
     public UserDetailDto registerNewUser(RegisterNewUserDto registerNewUserDto) {
-        Optional<User> existingUserEmail = userRepository.findByEmail(registerNewUserDto.getEmail());
-        Optional<User> existingUserName = userRepository.findByUsername(registerNewUserDto.getUsername());
+        String userEmail = registerNewUserDto.getEmail();
+        String userName = registerNewUserDto.getUsername();
+        Optional<User> existingUserEmail = userRepository.findByEmail(userEmail);
+        Optional<User> existingUserName = userRepository.findByUsername(userName);
 
         if (existingUserEmail.isPresent())
-            throw new ConflictException(String.format("Email \"%s\" is already registered.", registerNewUserDto.getEmail()));
+            throw new ConflictException(String.format("Email \"%s\" is already registered.", userEmail));
         if (existingUserName.isPresent())
-            throw new ConflictException(String.format("Username \"%s\" is already registered.", registerNewUserDto.getUsername()));
+            throw new ConflictException(String.format("Username \"%s\" is already registered.", userName));
 
-        Permission permission = validatePermissionType(registerNewUserDto.getPermissionType());
-        registerNewUserDto.setPassword(encoder.encode(registerNewUserDto.getPassword()));
-        User user = UserMapper.mapToUser(registerNewUserDto, permission);
+        registerNewUserDto.setPassword(hashPassword(registerNewUserDto.getPassword()));
+        User user = UserMapper.mapToUser(registerNewUserDto);
         User savedUser = userRepository.save(user);
         return UserMapper.mapToUserDto(savedUser);
     }
@@ -63,9 +58,7 @@ public class UserService implements IUserService {
     public String verifyUserCredentials(String username, String password) {
         String failRes = "Username or Password is incorrect";
         try {
-            Authentication auth = authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(username, password));
-            if (auth.isAuthenticated()) {
+            if (isUserAuthenticated(username, password)) {
                 return jwtService.generateToken(username);
             }
         } catch (Exception e) {
@@ -74,71 +67,61 @@ public class UserService implements IUserService {
         return failRes;
     }
 
-    @Override
-    public List<UserDetailDto> getAllUsers() {
-        List<User> users = userRepository.findAll();
-        return users.stream().map(UserMapper::mapToUserDto).collect(Collectors.toList());
-    }
 
     @Override
-    public UserDetailDto getUserByEmail(String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("User with email \"%s\" does not exist.", email)));
+    public UserDetailDto getLoggedInUser() {
+        User user = getCurrentUser();
         return UserMapper.mapToUserDto(user);
     }
 
     @Override
-    public UserDetailDto updateUserName(Long id, UserDetailDto userDetailDto) {
-        User user = getUserById(id);
-        user.setFirstName(userDetailDto.getFirstName());
-        user.setLastName(userDetailDto.getLastName());
+    public UserDetailDto updateUserFirstLastName(UpdateUserNamesDto updateUserNamesDto) {
+        User user = getCurrentUser();
+        user.setFirstName(updateUserNamesDto.getFirstName());
+        user.setLastName(updateUserNamesDto.getLastName());
         User updateUser = userRepository.save(user);
         return UserMapper.mapToUserDto(updateUser);
     }
 
     @Override
-    public UserDetailDto updateUserPermission(Long id, UserDetailDto userDetailDto) {
-        User user = getUserById(id);
-        Permission permission = validatePermissionType(userDetailDto.getPermissionType());
-        user.setPermission(permission);
+    public UserDetailDto updateUserPassword(UpdateUserPassDto updateUserPassDto) {
+        User user = getCurrentUser();
+        try{
+            isUserAuthenticated(user.getUsername(), updateUserPassDto.getCurrentPassword());
+        }
+        catch (Exception e) {
+            throw new UnauthorizedException("Current password is incorrect.");
+        }
+        user.setPassword(hashPassword(updateUserPassDto.getNewPassword()));
         User updateUser = userRepository.save(user);
         return UserMapper.mapToUserDto(updateUser);
     }
 
     @Override
-    public UserDetailDto updateUserPassword(Long id, UpdateUserPassDto updateUserPassDto) {
-        User user = getUserById(id);
-        validatePassword(user.getPassword(), updateUserPassDto.getCurrentPassword());
-        user.setPassword(updateUserPassDto.getNewPassword());
-        User updateUser = userRepository.save(user);
-        return UserMapper.mapToUserDto(updateUser);
-    }
-
-    @Override
-    public void deleteUser(long id) {
-        User user = getUserById(id);
-        userRepository.deleteById(id);
+    public void deleteUser(LoginUserDto loginUserDto) {
+        try {
+            if (isUserAuthenticated(loginUserDto.getUsername(), loginUserDto.getPassword()))
+                userRepository.deleteById(getCurrentUser().getId());
+        }
+        catch (Exception e) {
+            throw new UnauthorizedException("Username or Password is incorrect");
+        }
     }
 
     // Helpers:
-    private User getUserById(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("User with id \"%d\" does not exist", id)));
+    private User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+        return userRepository.findByUsername(userName)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("User \"%s\" is not found.", userName)));
     }
-    private void validatePassword(String enteredPassword, String actualPassword) {
-        if (!Objects.equals(enteredPassword, actualPassword))
-            throw new UnauthorizedException("Current password is incorrect.");
+    private boolean isUserAuthenticated(String username, String password) {
+        Authentication auth = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        return auth.isAuthenticated();
     }
-
-    private Permission validatePermissionType(String permissionTypeStr) {
-        PermissionType permissionType;
-        try {
-            permissionType = PermissionType.valueOf(permissionTypeStr);
-        } catch (IllegalArgumentException e) {
-            throw new ConflictException("Invalid permission type: " + permissionTypeStr);
-        }
-        return permissionRepository.findByPermissionType(permissionType)
-                .orElseThrow(() -> new ConflictException("Invalid permission type"));
+    private String hashPassword(String enteredPassword) {
+        return encoder.encode(enteredPassword);
     }
 
 }
