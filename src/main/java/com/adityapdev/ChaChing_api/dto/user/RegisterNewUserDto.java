@@ -1,13 +1,11 @@
 package com.adityapdev.ChaChing_api.dto.user;
 
-import com.adityapdev.ChaChing_api.config.PermissionType;
-
 public class RegisterNewUserDto extends UserDto{
 
     private String password;
 
     public RegisterNewUserDto(Long id, String firstName, String lastName, String username, String email, String password) {
-        super(id, firstName, lastName, username, email, PermissionType.BASE_USER.toString());
+        super(id, firstName, lastName, username, email);
         this.password = password;
     }
 

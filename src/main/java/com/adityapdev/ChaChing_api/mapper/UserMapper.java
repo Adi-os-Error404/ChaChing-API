@@ -2,7 +2,6 @@ package com.adityapdev.ChaChing_api.mapper;
 
 import com.adityapdev.ChaChing_api.dto.user.RegisterNewUserDto;
 import com.adityapdev.ChaChing_api.dto.user.UserDetailDto;
-import com.adityapdev.ChaChing_api.entity.Permission;
 import com.adityapdev.ChaChing_api.entity.User;
 
 public class UserMapper {
@@ -12,19 +11,17 @@ public class UserMapper {
                 user.getFirstName(),
                 user.getLastName(),
                 user.getUsername(),
-                user.getEmail(),
-                user.getPermission().getPermissionType().toString()
+                user.getEmail()
         );
     }
-    public static User mapToUser(RegisterNewUserDto registerNewUserDto, Permission permission) {
+    public static User mapToUser(RegisterNewUserDto registerNewUserDto) {
         return new User(
                 registerNewUserDto.getId(),
                 registerNewUserDto.getFirstName(),
                 registerNewUserDto.getLastName(),
                 registerNewUserDto.getUsername(),
                 registerNewUserDto.getEmail(),
-                registerNewUserDto.getPassword(),
-                permission
+                registerNewUserDto.getPassword()
         );
     }
 }

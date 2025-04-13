@@ -1,8 +1,5 @@
 package com.adityapdev.ChaChing_api.dto.user;
 
-import com.adityapdev.ChaChing_api.config.PermissionType;
-import com.adityapdev.ChaChing_api.entity.Permission;
-
 public abstract class UserDto {
 
     private final Long id;
@@ -10,15 +7,13 @@ public abstract class UserDto {
     private String lastName;
     private String username;
     private String email;
-    private String permissionType;
 
-    public UserDto(Long id, String firstName, String lastName, String username, String email, String permissionType) {
+    public UserDto(Long id, String firstName, String lastName, String username, String email) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.username = username;
-        this.email = email;
-        this.permissionType = permissionType;
+        this.username = username.toLowerCase();
+        this.email = email.toLowerCase();
     }
 
     public Long getId() {
@@ -55,14 +50,6 @@ public abstract class UserDto {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPermissionType() {
-        return permissionType;
-    }
-
-    public void setPermissionType(PermissionType permission) {
-        this.permissionType = permissionType;
     }
 
 }
