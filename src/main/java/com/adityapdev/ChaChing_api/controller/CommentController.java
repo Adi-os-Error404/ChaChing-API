@@ -1,17 +1,12 @@
 package com.adityapdev.ChaChing_api.controller;
 
-import com.adityapdev.ChaChing_api.dto.coin.AddCoinDto;
-import com.adityapdev.ChaChing_api.dto.coin.CoinDetailDto;
 import com.adityapdev.ChaChing_api.dto.comment.AddCommentDto;
 import com.adityapdev.ChaChing_api.dto.comment.CommentDetailDto;
 import com.adityapdev.ChaChing_api.dto.comment.EditCommentDto;
-import com.adityapdev.ChaChing_api.service.interfaces.ICoinService;
 import com.adityapdev.ChaChing_api.service.interfaces.ICommentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/comments")
