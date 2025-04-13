@@ -22,10 +22,10 @@ public class Coin {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "currentPriceUsd")
+    @Column(name = "current_price_usd")
     private BigDecimal currentPrice;
 
-    @Column(name = "marketCap", nullable = false)
+    @Column(name = "market_cap", nullable = false)
     private BigDecimal marketCap;
 
     @OneToMany(mappedBy = "coin", cascade = CascadeType.ALL, orphanRemoval = true)

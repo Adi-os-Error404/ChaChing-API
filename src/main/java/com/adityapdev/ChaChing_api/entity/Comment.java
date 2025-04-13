@@ -17,10 +17,10 @@ public class Comment {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "createdOn", nullable = false)
+    @Column(name = "created_on", nullable = false)
     private Instant createdOn;
 
-    @Column(name = "editedOn")
+    @Column(name = "edited_on")
     private Instant editedOn;
 
     @ManyToOne

@@ -2,6 +2,9 @@ package com.adityapdev.ChaChing_api.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -23,6 +26,9 @@ public class User {
 
     @Column(name = "password", nullable = false)
     private String password;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserCoin> coinsInPorfolio = new ArrayList<>();
 
     public User() {}
 
@@ -81,6 +87,15 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<UserCoin> getPortfolio() {
+        return coinsInPorfolio;
+    }
+
+    public void addToPortfolio(UserCoin userCoin) {
+        coinsInPorfolio.add(userCoin);
+        userCoin.setUser(this);
     }
 
 }

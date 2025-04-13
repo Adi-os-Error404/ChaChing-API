@@ -20,7 +20,6 @@ public class UserPrincipal implements UserDetails {
         return Collections.singleton(new SimpleGrantedAuthority("USER"));
     }
 
-
     @Override
     public String getUsername() {
         return user.getUsername();
