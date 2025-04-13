@@ -1,5 +1,6 @@
 package com.adityapdev.ChaChing_api.service;
 
+import com.adityapdev.ChaChing_api.service.interfaces.IJWTService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -24,7 +25,7 @@ import java.util.function.Function;
  *    In SecurityConfig, we added a rule "addFilterBefore", where JwtFiler class in config package, uses the JWTService validation token functions.
  */
 @Service
-public class JWTService {
+public class JWTService implements IJWTService {
 
     private static final int SESSION_LENGTH_MINS = 10;
     private static final String CRYPTO_ALGO = "HmacSHA256";
