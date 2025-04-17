@@ -1,6 +1,6 @@
 package com.adityapdev.ChaChing_api.dto.user;
 
-public class RegisterNewUserDto extends UserDto{
+public class RegisterNewUserDto extends UserDto {
 
     private String password;
 
