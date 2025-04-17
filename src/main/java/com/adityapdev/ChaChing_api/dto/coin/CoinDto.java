@@ -7,6 +7,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+
+// TODO: Remove this - make a smaller quick dto - only need name, symbol, pic
 public abstract class CoinDto {
     private String coinId;
     private String symbol;

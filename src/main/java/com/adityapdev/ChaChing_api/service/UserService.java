@@ -17,10 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService implements IUserService {
@@ -56,16 +53,10 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public String verifyUserCredentials(String username, String password) {
-        String failRes = "Username or Password is incorrect";
-        try {
-            if (isUserAuthenticated(username, password)) {
-                return jwtService.generateToken(username);
-            }
-        } catch (Exception e) {
-            throw new UnauthorizedException(failRes);
-        }
-        return failRes;
+    public LoginUserDto verifyUserCredentials(String username, String password) {
+        authenticateUser(username, password);
+        String token = jwtService.generateToken(username);
+        return new LoginUserDto(username, password, token);
     }
 
 
@@ -87,12 +78,7 @@ public class UserService implements IUserService {
     @Override
     public UserDetailDto updateUserPassword(UpdateUserPassDto updateUserPassDto) {
         User user = getCurrentUser();
-        try{
-            isUserAuthenticated(user.getUsername(), updateUserPassDto.getCurrentPassword());
-        }
-        catch (Exception e) {
-            throw new UnauthorizedException("Current password is incorrect.");
-        }
+        authenticateUser(user.getUsername(), user.getPassword());
         user.setPassword(hashPassword(updateUserPassDto.getNewPassword()));
         User updateUser = userRepository.save(user);
         return UserMapper.mapToUserDto(updateUser);
@@ -100,27 +86,27 @@ public class UserService implements IUserService {
 
     @Override
     public void deleteUser(LoginUserDto loginUserDto) {
-        try {
-            if (isUserAuthenticated(loginUserDto.getUsername(), loginUserDto.getPassword()))
-                userRepository.deleteById(getCurrentUser().getId());
-        }
-        catch (Exception e) {
-            throw new UnauthorizedException("Username or Password is incorrect");
-        }
+        authenticateUser(loginUserDto.getUsername(), loginUserDto.getPassword());
+        userRepository.deleteById(getCurrentUser().getId());
     }
 
-    // Helpers:
+    @Override
     public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         return userRepository.findByUsername(userName)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("User \"%s\" is not found.", userName)));
     }
-    private boolean isUserAuthenticated(String username, String password) {
-        Authentication auth = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        return auth.isAuthenticated();
+
+    private void authenticateUser(String username, String password) {
+        try{
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        }
+        catch (Exception e) {
+            throw new UnauthorizedException("Username or Password is incorrect");
+        }
     }
+
     private String hashPassword(String enteredPassword) {
         return encoder.encode(enteredPassword);
     }

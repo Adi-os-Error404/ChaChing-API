@@ -2,6 +2,7 @@ package com.adityapdev.ChaChing_api.controller;
 
 
 import com.adityapdev.ChaChing_api.dto.user.*;
+import com.adityapdev.ChaChing_api.exception.UnauthorizedException;
 import com.adityapdev.ChaChing_api.service.interfaces.IUserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,8 +28,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody LoginUserDto loginUserDto) {
-        String res = userService.verifyUserCredentials(loginUserDto.getUsername(), loginUserDto.getPassword());
+    public ResponseEntity<LoginUserDto> loginUser(@RequestBody LoginUserDto loginUserDto) {
+        LoginUserDto res = userService.verifyUserCredentials(loginUserDto.getUsername(), loginUserDto.getPassword());
         return ResponseEntity.ok(res);
     }
 
