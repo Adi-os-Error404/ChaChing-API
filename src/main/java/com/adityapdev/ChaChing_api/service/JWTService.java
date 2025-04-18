@@ -56,6 +56,9 @@ public class JWTService implements IJWTService {
         return (userName.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
+    public long getTokenExpiry(String token) {
+        return extractExpiration(token).getTime();
+    }
 
     // Helpers:
     private int convertMinsToMilliSecs(int mins) {

@@ -6,4 +6,5 @@ public interface IJWTService {
     String generateToken(String username);
     String extractUsername(String token);
     boolean validateToken(String token, UserDetails userDetails);
+    long getTokenExpiry(String token);
 }
