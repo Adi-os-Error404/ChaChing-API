@@ -5,6 +5,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -29,17 +30,9 @@ public class JWTService implements IJWTService {
 
     private static final int SESSION_LENGTH_MINS = 10;
     private static final String CRYPTO_ALGO = "HmacSHA256";
-    private String secretKey;
 
-    public JWTService() {
-        try {
-            KeyGenerator keyGenerator = KeyGenerator.getInstance(CRYPTO_ALGO);
-            SecretKey sk = keyGenerator.generateKey();
-            secretKey = Base64.getEncoder().encodeToString(sk.getEncoded());
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    @Value("${jwt.secret}")
+    private String secretKey;
 
     public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
@@ -65,7 +58,6 @@ public class JWTService implements IJWTService {
 
 
     // Helpers:
-
     private int convertMinsToMilliSecs(int mins) {
         return mins * 60 * 1000;
     }
