@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IUserService {
     UserDetailDto registerNewUser(RegisterNewUserDto registerNewUserDto);
-    LoginUserDto verifyUserCredentials(String username, String password);
+    LoginRespUserDto verifyUserCredentials(String username, String password);
     UserDetailDto getLoggedInUser();
     UserDetailDto updateUserFirstLastName(UpdateUserNamesDto updateUserNamesDto);
     UserDetailDto updateUserPassword(UpdateUserPassDto updateUserPassDto);

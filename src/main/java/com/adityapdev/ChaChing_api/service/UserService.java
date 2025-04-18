@@ -53,10 +53,11 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public LoginUserDto verifyUserCredentials(String username, String password) {
+    public LoginRespUserDto verifyUserCredentials(String username, String password) {
         authenticateUser(username, password);
         String token = jwtService.generateToken(username);
-        return new LoginUserDto(username, password, token);
+        long expiry = jwtService.getTokenExpiry(token);
+        return new LoginRespUserDto(username, token, expiry);
     }
 
 

@@ -28,8 +28,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginUserDto> loginUser(@RequestBody LoginUserDto loginUserDto) {
-        LoginUserDto res = userService.verifyUserCredentials(loginUserDto.getUsername(), loginUserDto.getPassword());
+    public ResponseEntity<LoginRespUserDto> loginUser(@RequestBody LoginUserDto loginUserDto) {
+        LoginRespUserDto res = userService.verifyUserCredentials(loginUserDto.getUsername(), loginUserDto.getPassword());
         return ResponseEntity.ok(res);
     }
 
