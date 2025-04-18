@@ -42,9 +42,9 @@ public class UserService implements IUserService {
         Optional<User> existingUserName = userRepository.findByUsername(userName);
 
         if (existingUserEmail.isPresent())
-            throw new ConflictException(String.format("Email \"%s\" is already registered.", userEmail));
+            throw new ConflictException(String.format("Email \"%s\" is already registered", userEmail));
         if (existingUserName.isPresent())
-            throw new ConflictException(String.format("Username \"%s\" is already registered.", userName));
+            throw new ConflictException(String.format("Username \"%s\" is already registered", userName));
 
         registerNewUserDto.setPassword(hashPassword(registerNewUserDto.getPassword()));
         User user = UserMapper.mapToUser(registerNewUserDto);
@@ -95,7 +95,7 @@ public class UserService implements IUserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         return userRepository.findByUsername(userName)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("User \"%s\" is not found.", userName)));
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("User \"%s\" is not found", userName)));
     }
 
     private void authenticateUser(String username, String password) {
