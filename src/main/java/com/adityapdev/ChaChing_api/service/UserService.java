@@ -79,7 +79,7 @@ public class UserService implements IUserService {
     @Override
     public UserDetailDto updateUserPassword(UpdateUserPassDto updateUserPassDto) {
         User user = getCurrentUser();
-        authenticateUser(user.getUsername(), user.getPassword());
+        authenticateUser(user.getUsername(), updateUserPassDto.getCurrentPassword());
         user.setPassword(hashPassword(updateUserPassDto.getNewPassword()));
         User updateUser = userRepository.save(user);
         return UserMapper.mapToUserDto(updateUser);
