@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/comments")
 public class CommentController {
@@ -16,6 +18,12 @@ public class CommentController {
 
     public CommentController(ICommentService commentService) {
         this.commentService = commentService;
+    }
+
+    @GetMapping("/{coinId}")
+    public ResponseEntity<List<CommentDetailDto>> getCommentsByCoinId(@PathVariable String coinId) {
+        List<CommentDetailDto> comments = commentService.getComments(coinId);
+        return new ResponseEntity<>(comments, HttpStatus.OK);
     }
 
     @PostMapping("/{coinId}")
