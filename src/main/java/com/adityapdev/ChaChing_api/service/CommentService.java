@@ -5,13 +5,16 @@ import com.adityapdev.ChaChing_api.dto.comment.CommentDetailDto;
 import com.adityapdev.ChaChing_api.dto.comment.EditCommentDto;
 import com.adityapdev.ChaChing_api.entity.Coin;
 import com.adityapdev.ChaChing_api.entity.Comment;
+import com.adityapdev.ChaChing_api.entity.User;
 import com.adityapdev.ChaChing_api.exception.ResourceNotFoundException;
 import com.adityapdev.ChaChing_api.mapper.CoinMapper;
 import com.adityapdev.ChaChing_api.mapper.CommentMapper;
 import com.adityapdev.ChaChing_api.repository.CoinRepository;
 import com.adityapdev.ChaChing_api.repository.CommentRepository;
+import com.adityapdev.ChaChing_api.repository.UserRepository;
 import com.adityapdev.ChaChing_api.service.interfaces.ICoinService;
 import com.adityapdev.ChaChing_api.service.interfaces.ICommentService;
+import com.adityapdev.ChaChing_api.service.interfaces.IUserService;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -23,12 +26,16 @@ public class CommentService implements ICommentService {
 
     private final CommentRepository commentRepository;
     private final CoinRepository coinRepository;
+    private final UserRepository userRepository;
     private final ICoinService coinService;
+    private final IUserService userService;
 
-    public CommentService(CommentRepository commentRepository, CoinRepository coinRepository) {
+    public CommentService(CommentRepository commentRepository, CoinRepository coinRepository, UserRepository userRepository) {
         this.commentRepository = commentRepository;
         this.coinRepository = coinRepository;
+        this.userRepository = userRepository;
         this.coinService = new CoinService(coinRepository);
+        this.userService = new UserService(userRepository);
     }
 
     @Override
@@ -41,7 +48,8 @@ public class CommentService implements ICommentService {
     @Override
     public CommentDetailDto addComment(String coinId, AddCommentDto addCommentDto) {
         Coin coin = coinService.findCoinById(coinId);
-        Comment comment = CommentMapper.mapToComment(addCommentDto, coin);
+        User user = userService.getCurrentUser();
+        Comment comment = CommentMapper.mapToComment(addCommentDto, coin, user);
         Comment savedComment = commentRepository.save(comment);
         return CommentMapper.mapToCommentDto(savedComment);
     }
