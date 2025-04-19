@@ -52,7 +52,7 @@ public class JWTService implements IJWTService {
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
-        final String userName = extractUsername(token);
+        final String userName = extractUsername(token).toLowerCase();
         return (userName.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
