@@ -28,7 +28,7 @@ import java.util.function.Function;
 @Service
 public class JWTService implements IJWTService {
 
-    private static final int SESSION_LENGTH_MINS = 10;
+    private static final int SESSION_LENGTH_MINS = 60;
     private static final String CRYPTO_ALGO = "HmacSHA256";
 
     @Value("${jwt.secret}")
