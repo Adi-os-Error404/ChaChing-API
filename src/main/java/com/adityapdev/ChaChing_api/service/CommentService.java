@@ -6,6 +6,7 @@ import com.adityapdev.ChaChing_api.dto.comment.EditCommentDto;
 import com.adityapdev.ChaChing_api.entity.Coin;
 import com.adityapdev.ChaChing_api.entity.Comment;
 import com.adityapdev.ChaChing_api.exception.ResourceNotFoundException;
+import com.adityapdev.ChaChing_api.mapper.CoinMapper;
 import com.adityapdev.ChaChing_api.mapper.CommentMapper;
 import com.adityapdev.ChaChing_api.repository.CoinRepository;
 import com.adityapdev.ChaChing_api.repository.CommentRepository;
@@ -28,6 +29,13 @@ public class CommentService implements ICommentService {
         this.commentRepository = commentRepository;
         this.coinRepository = coinRepository;
         this.coinService = new CoinService(coinRepository);
+    }
+
+    @Override
+    public List<CommentDetailDto> getComments(String coinId) {
+        Coin coin = coinService.findCoinById(coinId);
+        List<Comment> comments = coin.getComments();
+        return comments.stream().map(CommentMapper::mapToCommentDto).toList();
     }
 
     @Override
