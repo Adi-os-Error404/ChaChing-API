@@ -57,7 +57,7 @@ public class UserService implements IUserService {
         authenticateUser(username, password);
         String token = jwtService.generateToken(username);
         long expiry = jwtService.getTokenExpiry(token);
-        return new LoginRespUserDto(username, token, expiry);
+        return new LoginRespUserDto(username.toLowerCase(), token, expiry);
     }
 
 
