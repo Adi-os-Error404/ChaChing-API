@@ -27,14 +27,19 @@ public class Comment {
     @JoinColumn(name = "coin_id", nullable = false)
     private Coin coin;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     public Comment() {}
 
-    public Comment(String title, String content, Coin coin) {
+    public Comment(String title, String content, Coin coin, User user) {
         this.title = title;
         this.content = content;
         this.createdOn = Instant.now();
         this.editedOn = null;
         this.coin = coin;
+        this.user = user;
     }
 
     public Long getId() {
@@ -84,4 +89,13 @@ public class Comment {
     public void setCoin(Coin coin) {
         this.coin = coin;
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
 }
