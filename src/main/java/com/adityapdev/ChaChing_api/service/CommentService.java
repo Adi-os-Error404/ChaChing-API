@@ -7,6 +7,7 @@ import com.adityapdev.ChaChing_api.entity.Coin;
 import com.adityapdev.ChaChing_api.entity.Comment;
 import com.adityapdev.ChaChing_api.entity.User;
 import com.adityapdev.ChaChing_api.exception.ResourceNotFoundException;
+import com.adityapdev.ChaChing_api.exception.UnauthorizedException;
 import com.adityapdev.ChaChing_api.mapper.CoinMapper;
 import com.adityapdev.ChaChing_api.mapper.CommentMapper;
 import com.adityapdev.ChaChing_api.repository.CoinRepository;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -58,22 +60,35 @@ public class CommentService implements ICommentService {
     public CommentDetailDto updateComment(EditCommentDto editCommentDto) {
         Long commentId = editCommentDto.getId();
         Comment comment = findCommentById(commentId);
-        comment.setTitle(editCommentDto.getTitle());
-        comment.setContent(editCommentDto.getContent());
-        comment.setEditedOn(Instant.now());
-        Comment savedComment =  commentRepository.save(comment);
-        return CommentMapper.mapToCommentDto(savedComment);
+        if (isAuthor(comment)) {
+            comment.setTitle(editCommentDto.getTitle());
+            comment.setContent(editCommentDto.getContent());
+            comment.setEditedOn(Instant.now());
+            Comment savedComment =  commentRepository.save(comment);
+            return CommentMapper.mapToCommentDto(savedComment);
+        }
+        throw new UnauthorizedException("Comment cannot be edited.");
     }
 
     @Override
     public void deleteComment(Long commentId) {
-        findCommentById(commentId);
-        commentRepository.deleteById(commentId);
+        Comment comment = findCommentById(commentId);
+        if (isAuthor(comment)) {
+            commentRepository.deleteById(commentId);
+        }
+        else {
+            throw new UnauthorizedException("Comment cannot be deleted.");
+        }
     }
 
     private Comment findCommentById(Long commentId) {
         return commentRepository.findById(commentId)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Comment \"%d\" does not exist.", commentId)));
+    }
+
+    private boolean isAuthor(Comment comment) {
+        User author = userService.getCurrentUser();
+        return Objects.equals(author.getUsername(), comment.getUser().getUsername());
     }
 
 
