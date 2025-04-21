@@ -1,13 +1,19 @@
 package com.adityapdev.ChaChing_api.dto.portfolio;
 
-import com.adityapdev.ChaChing_api.dto.coin.CoinDto;
-
 import java.math.BigDecimal;
 
-public class CoinInPortfolioDto extends CoinDto {
+public class CoinInPortfolioDto {
 
-    public CoinInPortfolioDto(String coinId, String symbol, String name, BigDecimal currentPrice, Long marketCap) {
-        super(coinId, symbol, name, currentPrice, marketCap);
+    public String coinId;
+    public String symbol;
+    public String name;
+    public String imgUrl;
+
+    public CoinInPortfolioDto(String coinId, String symbol, String name, String imgUrl) {
+        this.coinId = coinId;
+        this.symbol = symbol;
+        this.name = name;
+        this.imgUrl = imgUrl;
     }
 
 }
