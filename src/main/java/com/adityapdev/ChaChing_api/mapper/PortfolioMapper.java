@@ -10,8 +10,7 @@ public class PortfolioMapper {
                 coin.getCoinId(),
                 coin.getSymbol(),
                 coin.getName(),
-                coin.getCurrentPrice(),
-                coin.getMarketCap()
+                coin.getImageLarge()
         );
     }
 
