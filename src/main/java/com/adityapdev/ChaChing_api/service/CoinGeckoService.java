@@ -22,7 +22,7 @@ public class CoinGeckoService implements ICoinGeckoService {
             return CoinMapper.mapToCoin(details, CURRENCY);
 
         } catch (RestClientException ex) {
-            throw new ResourceNotFoundException(coinId + "does not exist.");
+            throw new ResourceNotFoundException(coinId + " does not exist.");
         }
     }
 

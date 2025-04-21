@@ -4,6 +4,7 @@ import com.adityapdev.ChaChing_api.dto.portfolio.CoinInPortfolioDto;
 import com.adityapdev.ChaChing_api.entity.Coin;
 import com.adityapdev.ChaChing_api.entity.User;
 import com.adityapdev.ChaChing_api.entity.UserCoin;
+import com.adityapdev.ChaChing_api.exception.ConflictException;
 import com.adityapdev.ChaChing_api.exception.ResourceNotFoundException;
 import com.adityapdev.ChaChing_api.mapper.PortfolioMapper;
 import com.adityapdev.ChaChing_api.repository.CoinRepository;
@@ -40,6 +41,9 @@ public class PortfolioService implements IPortfolioService {
     public CoinInPortfolioDto addCoinToUserPort(String coinId) {
         User user = userService.getCurrentUser();
         Coin coin = coinService.findCoinById(coinId);
+        UserCoin checkUserCoin = userCoinRepository.findByUserIdAndCoinId(user.getId(), coin.getId());
+        if (checkUserCoin != null)
+            throw new ConflictException(coinId.toUpperCase() + " already exists in portfolio");
         UserCoin userCoin = new UserCoin(user, coin);
         userCoinRepository.save(userCoin);
         return PortfolioMapper.mapToPortfolioDto(coin);
@@ -51,9 +55,9 @@ public class PortfolioService implements IPortfolioService {
         Coin coin = coinService.findCoinById(coinId);
         UserCoin userCoin = userCoinRepository.findByUserIdAndCoinId(user.getId(), coin.getId());
         if (userCoin == null)
-            throw new ResourceNotFoundException(coinId + " is not in portfolio.");
+            throw new ResourceNotFoundException(coinId + " is not in portfolio");
         userCoinRepository.deleteById(userCoin.getId());
-        return coin.getName() + " removed from portfolio successfully.";
+        return coin.getName() + " removed from portfolio successfully!";
     }
 
 
