@@ -30,6 +30,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserCoin> coinsInPorfolio = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
     public User() {}
 
     public User(Long id, String firstName, String lastName, String username, String email, String password) {
