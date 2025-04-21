@@ -3,7 +3,10 @@ package com.adityapdev.ChaChing_api.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "user_coin")
+@Table(
+        name = "user_coin",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "coin_id"})}
+)
 public class UserCoin {
 
     @Id
