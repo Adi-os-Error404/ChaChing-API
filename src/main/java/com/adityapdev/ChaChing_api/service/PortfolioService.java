@@ -21,14 +21,15 @@ import java.util.stream.Collectors;
 @Service
 public class PortfolioService implements IPortfolioService {
 
+
     private final UserCoinRepository userCoinRepository;
     private final IUserService userService;
     private final ICoinService coinService;
 
-    public PortfolioService(UserCoinRepository userCoinRepository, UserRepository userRepository, CoinRepository coinRepository) {
+    public PortfolioService(UserCoinRepository userCoinRepository, IUserService userService, ICoinService coinService) {
         this.userCoinRepository = userCoinRepository;
-        this.userService = new UserService(userRepository);
-        this.coinService = new CoinService(coinRepository);
+        this.userService = userService;
+        this.coinService = coinService;
     }
 
     @Override

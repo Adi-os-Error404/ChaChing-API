@@ -27,17 +27,14 @@ import java.util.stream.Collectors;
 public class CommentService implements ICommentService {
 
     private final CommentRepository commentRepository;
-    private final CoinRepository coinRepository;
-    private final UserRepository userRepository;
     private final ICoinService coinService;
     private final IUserService userService;
 
-    public CommentService(CommentRepository commentRepository, CoinRepository coinRepository, UserRepository userRepository) {
+
+    public CommentService(CommentRepository commentRepository, ICoinService coinService, IUserService userService) {
         this.commentRepository = commentRepository;
-        this.coinRepository = coinRepository;
-        this.userRepository = userRepository;
-        this.coinService = new CoinService(coinRepository);
-        this.userService = new UserService(userRepository);
+        this.coinService = coinService;
+        this.userService = userService;
     }
 
     @Override
