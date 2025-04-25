@@ -1,9 +1,12 @@
 package com.adityapdev.ChaChing_api.service;
 
 import com.adityapdev.ChaChing_api.dto.arbitrage.ArbitrageDto;
+import com.adityapdev.ChaChing_api.entity.Coin;
 import com.adityapdev.ChaChing_api.entity.CurrencyGraph;
 import com.adityapdev.ChaChing_api.exception.ConflictException;
+import com.adityapdev.ChaChing_api.repository.CoinRepository;
 import com.adityapdev.ChaChing_api.service.interfaces.IArbitrageService;
+import com.adityapdev.ChaChing_api.service.interfaces.ICoinService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -18,6 +21,11 @@ import java.util.concurrent.TimeUnit;
 public class ArbitrageService implements IArbitrageService {
 
     private final RestTemplate restTemplate = new RestTemplate();
+    private final CoinRepository coinRepository;
+
+    public ArbitrageService(CoinRepository coinRepository) {
+        this.coinRepository = coinRepository;
+    }
 
     /**
      * Detects arbitrage opportunities from a list of coin symbols using multithreaded execution of arbitrage detection algorithm
@@ -28,7 +36,7 @@ public class ArbitrageService implements IArbitrageService {
     public List<ArbitrageDto> detectArbitrage(BigDecimal profitMargin, List<String> coinSymbols) {
         if (coinSymbols.size() < 3)
             throw new ConflictException("Minimum of 3 coins in the portfolio are required!");
-        
+
         System.out.println(coinSymbols);
 
         List<ArbitrageDto> res = Collections.synchronizedList(new ArrayList<>());
@@ -112,7 +120,9 @@ public class ArbitrageService implements IArbitrageService {
                         BigDecimal rate = graph.getRates()[from][to];
                         rateProduct = rateProduct.multiply(rate);
 
-                        tradeSteps.add(new ArbitrageDto.TradeStep(toCoin, fromCoin, invert(rate)));
+                        String imgUrl = coinRepository.findBySymbol(fromCoin).get().getImageLarge();
+
+                        tradeSteps.add(new ArbitrageDto.TradeStep(toCoin, fromCoin, invert(rate), imgUrl));
                         cycleDetails.add(String.format("%s -> %s : %s", fromCoin, toCoin, rate.toString()));
                     }
 
