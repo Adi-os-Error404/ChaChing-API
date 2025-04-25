@@ -46,14 +46,16 @@ public class ArbitrageDto {
         private String from;
         private String to;
         private BigDecimal rate;
+        private String fromImg;
 
         public TradeStep() {
         }
 
-        public TradeStep(String from, String to, BigDecimal rate) {
+        public TradeStep(String from, String to, BigDecimal rate, String fromImg) {
             this.from = from;
             this.to = to;
             this.rate = rate;
+            this.fromImg = fromImg;
         }
 
         public String getFrom() {
@@ -78,6 +80,14 @@ public class ArbitrageDto {
 
         public void setRate(BigDecimal rate) {
             this.rate = rate;
+        }
+
+        public String getFromImg() {
+            return fromImg;
+        }
+
+        public void setFromImg(String fromImg) {
+            this.fromImg = fromImg;
         }
 
     }
