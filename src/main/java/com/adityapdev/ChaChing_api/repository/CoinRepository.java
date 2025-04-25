@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface CoinRepository extends JpaRepository<Coin, Long> {
     Optional<Coin> findByCoinId(String coinId);
+    Optional<Coin> findBySymbol(String symbol);
 }
