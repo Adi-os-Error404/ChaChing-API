@@ -30,14 +30,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .cors(Customizer.withDefaults())
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable) // disable csrf protection - safe for stateless APIs (no session to attack)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/account/register", "/api/account/login").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
-                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // ensure no session is created or stored
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class) // use jwtFilter to extract & validate token
                 .build();
     }
 

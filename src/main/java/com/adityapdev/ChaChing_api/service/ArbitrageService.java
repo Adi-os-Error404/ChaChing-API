@@ -102,10 +102,10 @@ public class ArbitrageService implements IArbitrageService {
                     }
 //        graph.displayMatrix(graph.getMatrix(), "GRAPH after Floyd-Warshall:");
 
-        // Step 3: Detect cycle
+        // Step 3: Find all negative cycle
         for (int i = 0; i < n; i++) {
             if (dist[i][i].compareTo(BigDecimal.ONE) < 0) {
-                List<String> cycle = findCycle(i, succ, coinSymbols);
+                List<String> cycle = findCycle(i, succ, coinSymbols); // detect cycles
                 if (cycle.size() == 4) {
                     List<ArbitrageDto.TradeStep> tradeSteps = new ArrayList<>();
                     BigDecimal rateProduct = BigDecimal.ONE;
