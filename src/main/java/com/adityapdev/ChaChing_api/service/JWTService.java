@@ -20,7 +20,7 @@ import java.util.function.Function;
 
 
 /*
- * 1. In order to user Bearer Auth in the frontend, we first need to generate a token, when a user logs in - handled by generateToken function
+ * 1. In order send Bearer Auth in the frontend, we first need to generate a token, when a user logs in - handled by generateToken function
  * 2. Next time the logged-in user uses an API, we will not require them to log in, but pass the generated token as a Bearer Auth.
  * 3. When the backend, received the Bearer auth, we need to validate it:
  *    In SecurityConfig, we added a rule "addFilterBefore", where JwtFiler class in config package, uses the JWTService validation token functions.
