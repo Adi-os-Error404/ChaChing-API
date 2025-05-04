@@ -17,7 +17,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-// Helpful Doc - JJWT impl: https://www.baeldung.com/java-json-web-tokens-jjwt
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
