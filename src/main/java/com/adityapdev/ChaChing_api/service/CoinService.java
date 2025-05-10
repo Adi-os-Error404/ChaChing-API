@@ -17,10 +17,11 @@ import java.util.stream.Collectors;
 public class CoinService implements ICoinService {
 
     private final CoinRepository coinRepository;
-    private final ICoinGeckoService coinGeckoService = new CoinGeckoService();
+    private final ICoinGeckoService coinGeckoService;
 
-    public CoinService(CoinRepository coinRepository) {
+    public CoinService(CoinRepository coinRepository, ICoinGeckoService coinGeckoService) {
         this.coinRepository = coinRepository;
+        this.coinGeckoService = coinGeckoService;
     }
 
     @Override
