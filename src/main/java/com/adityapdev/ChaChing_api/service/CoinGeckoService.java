@@ -5,12 +5,14 @@ import com.adityapdev.ChaChing_api.entity.Coin;
 import com.adityapdev.ChaChing_api.exception.ResourceNotFoundException;
 import com.adityapdev.ChaChing_api.mapper.CoinMapper;
 import com.adityapdev.ChaChing_api.service.interfaces.ICoinGeckoService;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.util.Map;
 
+@Service
 public class CoinGeckoService implements ICoinGeckoService {
 
     public final static String CURRENCY = "usd";
