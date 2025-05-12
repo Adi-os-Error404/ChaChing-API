@@ -19,7 +19,7 @@ public class UserSecurityService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format("User \"%s\" does not exist", username)));
-        return new UserPrincipal(user);
+        return new UserPrincipal(user); // Interface UserDetails impl: UserPrincipal
     }
 
 }

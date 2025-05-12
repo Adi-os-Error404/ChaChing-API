@@ -22,7 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UserDetailsService userDetailsService; // interface's impl: UserSecurityService
     @Autowired
     private JwtFilter jwtFilter;
 
@@ -41,6 +41,8 @@ public class SecurityConfig {
                 .build();
     }
 
+    // Provider = User Credential Verifier
+    // Un-authenticated Object --> Authentication Provider --> Authenticated Object (used to connect with DB)
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -49,6 +51,7 @@ public class SecurityConfig {
         return provider;
     }
 
+    // Manager uses Provider to authenticate users
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
