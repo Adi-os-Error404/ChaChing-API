@@ -83,7 +83,7 @@ public class ArbitrageService implements IArbitrageService {
         // Step 1: Fetch rates
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                BigDecimal rate = (i == j) ? BigDecimal.ONE : getRate(coinSymbols.get(i), coinSymbols.get(j));
+                BigDecimal rate = (i == j) ? BigDecimal.ZERO : getRate(coinSymbols.get(i), coinSymbols.get(j));
                 graph.setRate(i, j, rate);
             }
         }
