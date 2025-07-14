@@ -83,7 +83,7 @@ public class ArbitrageService implements IArbitrageService {
         // Step 1: Fetch rates
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                BigDecimal rate = (i == j) ? BigDecimal.ZERO : getRate(coinSymbols.get(i), coinSymbols.get(j));
+                BigDecimal rate = (i == j) ? BigDecimal.ONE : getRate(coinSymbols.get(i), coinSymbols.get(j));
                 graph.setRate(i, j, rate);
             }
         }
@@ -100,7 +100,7 @@ public class ArbitrageService implements IArbitrageService {
                         dist[i][j] = dist[i][k].multiply(dist[k][j]);
                         succ[i][j] = succ[i][k];
                     }
-//        graph.displayMatrix(graph.getMatrix(), "GRAPH after Floyd-Warshall:");
+        graph.displayMatrix(graph.getMatrix(), "GRAPH after Floyd-Warshall:");
 
         // Step 3: Find all negative cycle
         for (int i = 0; i < n; i++) {
@@ -158,7 +158,7 @@ public class ArbitrageService implements IArbitrageService {
             return new BigDecimal(data.get("amount"));
         } catch (Exception e) {
             System.out.printf("Error fetching rate %s to %s: %s\n", from, to, e.getMessage());
-            return new BigDecimal(1);
+            return new BigDecimal(0);
         }
     }
 
