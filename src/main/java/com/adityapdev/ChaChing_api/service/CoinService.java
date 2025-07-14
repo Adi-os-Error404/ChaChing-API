@@ -50,7 +50,6 @@ public class CoinService implements ICoinService {
             return coinRepository.save(newCoin);
         }
         Coin existingCoin = coinInDb.get();
-        existingCoin.setCurrentPrice(coinGeckoService.getCurrentPrice(coinId));
         return coinRepository.save(existingCoin);
     }
 
